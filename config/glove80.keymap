@@ -19,34 +19,7 @@
 #define MAGIC   4
 
 / {
-    behaviors {
-        ctrl_magic: tap_dance_ctrl_magic {
-            compatible = "zmk,behavior-tap-dance";
-            #binding-cells = <0>;
-            bindings = <&sk LCTRL>, <&mo MAGIC>;
-        };
-        gui_magic: tap_dance_gui_magic {
-            compatible = "zmk,behavior-tap-dance";
-            #binding-cells = <0>;
-            bindings = <&sk RGUI>, <&mo MAGIC>;
-        };
-        magic_status: hold_tap_magic {
-            compatible = "zmk,behavior-hold-tap";
-            label = "MAGIC_HOLD_TAP";
-            #binding-cells = <2>;
-            flavor = "tap-preferred";
-            tapping-term-ms = <200>;
-            bindings = <&mo>, <&rgb_ug_status>;
-        };
-    };
-
     macros {
-        rgb_ug_status: rgb_ug_status_macro {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <&rgb_ug RGB_STATUS>;
-        };
-
         bt_0: bt_profile_macro_0 {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
@@ -84,61 +57,110 @@
         };
     };
 
+    behaviors {
+        ctrl_magic: tap_dance_ctrl_magic {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            bindings = <&kp LCTRL>, <&mo MAGIC>;
+        };
+        caps_toggle: tap_dance_caps_toggle {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            bindings = <&caps_word>, <&kp LS(CAPS)>;
+        };
+        comma_semi: comma_semi {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp COMMA>, <&kp SEMI>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+        dot_colon: dot_colon {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp DOT>, <&kp COLON>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+        sqt_dqt: sqt_dqt {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp SQT>, <&kp DQT>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+        fslh_qmark: fslh_qmark {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp FSLH>, <&kp QMARK>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+        up_pgup: up_pgup {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp UP>, <&kp PG_UP>;
+            mods = <(MOD_LGUI|MOD_RGUI)>;
+        };
+        down_pgdn: down_pgdn {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp DOWN>, <&kp PG_DN>;
+            mods = <(MOD_LGUI|MOD_RGUI)>;
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
         colemak_layer {
             bindings = <
-                &none                  &none  &none  &none  &none                                                                                                          &none       &none      &none    &none     &none
-                &none                  &none  &none  &none  &none        &none                                                                                      &none  &none       &none      &none    &none     &none
-                &kp GRAVE              &kp Q  &kp W  &kp F  &kp P        &kp G                                                                                      &kp J  &kp L       &kp U      &kp Y    &kp SEMI  &kp BSLH
-                &to_chi                &kp A  &kp R  &kp S  &kp T        &kp D                                                                                      &kp H  &kp N       &kp E      &kp I    &kp O     &kp SQT
-                &kp ESC                &kp Z  &kp X  &kp C  &kp V        &kp B  &none           &none      &none        &none       &none          &none            &kp K  &kp M       &kp COMMA  &kp DOT  &kp FSLH  &kp MINUS
-                &magic_status MAGIC 0  &none  &none  &none  &ctrl_magic         &lt LOWER BSPC  &sk LSHFT  &ctrl_magic  &gui_magic  &lt LOWER RET  &lt UPPER SPACE         &gui_magic  &none      &none    &none     &magic_status MAGIC 0
+                &none              &none  &none  &none  &none                                                                                                   &none  &none        &none       &none        &none
+                &none              &none  &none  &none  &none        &none                                                                               &none  &none  &none        &none       &none        &none
+                &none              &kp Q  &kp W  &kp F  &kp P        &kp G                                                                               &kp J  &kp L  &kp U        &kp Y       &sqt_dqt     &none
+                &none              &kp A  &kp R  &kp S  &kp T        &kp D                                                                               &kp H  &kp N  &kp E        &kp I       &kp O        &none
+                &none              &kp Z  &kp X  &kp C  &kp V        &kp B  &none           &none          &none  &none  &none          &none            &kp K  &kp M  &comma_semi  &dot_colon  &fslh_qmark  &none
+                &rgb_ug RGB_STATUS &none  &none  &none  &none               &lt LOWER BSPC  &mt LSHFT ESC  &none  &none  &mt RCTRL RET  &lt UPPER SPACE         &none  &none        &none       &none        &rgb_ug RGB_STATUS
             >;
         };
 
         qwerty_layer {
             bindings = <
-                &none    &none  &none  &none  &none                                                                 &none   &none      &none    &none     &none
-                &none    &none  &none  &none  &none   &none                                                  &none  &none   &none      &none    &none     &none
-                &trans   &kp Q  &kp W  &kp E  &kp R   &kp T                                                  &kp Y  &kp U   &kp I      &kp O    &kp P     &kp BSLH
-                &to_eng  &kp A  &kp S  &kp D  &kp F   &kp G                                                  &kp H  &kp J   &kp K      &kp L    &kp SEMI  &kp SQT
-                &trans   &kp Z  &kp X  &kp C  &kp V   &kp B  &none   &none   &none   &none   &none   &none   &kp N  &kp M   &kp COMMA  &kp DOT  &kp FSLH  &kp MINUS
-                &trans   &none  &none  &none  &trans         &trans  &trans  &trans  &trans  &trans  &trans         &trans  &none      &none    &none     &trans
+                &none   &none  &none  &none  &none                                                                 &none   &none   &none   &none     &none
+                &none   &none  &none  &none  &none   &none                                                  &none  &none   &none   &none   &none     &none
+                &trans  &kp Q  &kp W  &kp E  &kp R   &kp T                                                  &kp Y  &kp U   &kp I   &kp O   &kp P     &trans
+                &trans  &kp A  &kp S  &kp D  &kp F   &kp G                                                  &kp H  &kp J   &kp K   &kp L   &sqt_dqt  &trans
+                &trans  &kp Z  &kp X  &kp C  &kp V   &kp B  &none   &none   &none   &none   &none   &none   &kp N  &kp M   &trans  &trans  &trans    &trans
+                &trans  &none  &none  &none  &none          &trans  &trans  &trans  &trans  &trans  &trans         &none   &none   &none   &none     &trans
             >;
         };
 
         lower_layer {
             bindings = <
-                &none         &none     &none     &none      &none                                                                                  &none   &none   &none   &none          &none
-                &none         &none     &none     &none      &none      &none                                                      &none            &none   &none   &none   &none          &none
-                &trans        &kp LT    &kp LBKT  &kp LPAR   &kp LBRC   &kp COLON                                                  &kp KP_MULTIPLY  &kp N7  &kp N8  &kp N9  &kp KP_DIVIDE  &kp BSPC
-                &caps_word    &sk LGUI  &sk LALT  &sk LCTRL  &sk LSHFT  &kp EQUAL                                                  &kp KP_PLUS      &kp N4  &kp N5  &kp N6  &kp KP_MINUS   &trans
-                &kp LS(CAPS)  &kp GT    &kp RBKT  &kp RPAR   &kp RBRC   &kp TILDE  &none   &none   &none   &none   &none   &none   &kp N0           &kp N1  &kp N2  &kp N3  &kp KP_DOT     &trans
-                &trans        &none     &none     &none      &trans                &trans  &trans  &trans  &trans  &trans  &trans                   &trans  &none   &none   &none          &trans
+                &none   &none         &none     &none      &none                                                                                       &none   &none   &none   &none            &none
+                &none   &none         &none     &none      &none      &none                                                           &none            &none   &none   &none   &none            &none
+                &trans  &kp LT        &kp LBKT  &kp LPAR   &kp LBRC   &kp GRAVE                                                       &kp KP_MULTIPLY  &kp N7  &kp N8  &kp N9  &kp BSLH         &trans
+                &trans  &sk LGUI      &sk LALT  &sk LCTRL  &sk LSHFT  &kp KP_EQUAL                                                    &kp KP_PLUS      &kp N4  &kp N5  &kp N6  &lt MAGIC MINUS  &trans
+                &trans  &lt MAGIC GT  &kp RBKT  &kp RPAR   &kp RBRC   &kp TILDE     &none   &none    &none   &none   &none    &none   &kp N0           &kp N1  &kp N2  &kp N3  &trans           &trans
+                &trans  &none         &none     &none      &trans                   &trans  &to_chi  &trans  &trans  &to_eng  &trans                   &none   &none   &none   &none            &trans
             >;
         };
 
         upper_layer {
             bindings = <
-                &none    &none     &none     &none      &none                                                                          &none       &none      &none      &none      &none
-                &none    &none     &none     &none      &none      &none                                                    &none      &none       &none      &none      &none      &none
-                &kp F11  &kp F1    &kp F2    &kp F3     &kp F4     &kp F5                                                   &kp LG(V)  &key_repeat &kp ESC    &kp TAB    &kp DEL    &kp BSPC
-                &kp F12  &sk LGUI  &sk LALT  &sk LCTRL  &sk LSHFT  &kp INS                                                  &kp LG(C)  &kp LEFT    &kp DOWN   &kp UP     &kp RIGHT  &kp LG(Z)
-                &trans   &kp F6    &kp F7    &kp F8     &kp F9     &kp F10  &none   &none   &none   &none   &none   &none   &kp LG(X)  &kp HOME    &kp PG_DN  &kp PG_UP  &kp END    &kp LG(LS(Z))
-                &trans   &none     &none     &none      &trans              &trans  &trans  &trans  &trans  &trans  &trans             &trans      &none      &none      &none      &trans
+                &none   &none     &none     &none      &none                                                                                  &none          &none       &none         &none          &none
+                &none   &none     &none     &none      &none      &none                                                            &none      &none          &none       &none         &none          &none
+                &trans  &kp F1    &kp F2    &kp F3     &kp F4     &kp F5                                                           &kp LG(V)  &kp LG(Z)      &up_pgup    &kp TAB       &kp BSPC       &trans
+                &trans  &sk LGUI  &sk LALT  &sk LCTRL  &sk LSHFT  &kp LG(SPACE)                                                    &kp LG(C)  &kp LEFT       &down_pgdn  &kp RIGHT     &lt MAGIC RET  &trans
+                &trans  &kp F6    &kp F7    &kp F8     &kp F9     &kp F10        &none   &none    &none   &none   &none    &none   &kp LG(X)  &kp LG(LS(Z))  &kp ESC     &caps_toggle  &kp DEL        &trans
+                &trans  &none     &none     &none      &none                     &trans  &to_chi  &trans  &trans  &to_eng  &trans             &none          &none       &none         &none          &trans
             >;
         };
 
         magic_layer {
             bindings = <
-                &none       &none            &none           &none           &none                                                                                                 &none         &none       &none         &none       &none
-                &none       &none            &none           &none           &none           &none                                                                    &none        &none         &none       &none         &none       &none
-                &bootloader &rgb_ug RGB_SPI  &rgb_ug RGB_HUI &rgb_ug RGB_SAI &rgb_ug RGB_BRI &rgb_ug RGB_TOG                                                          &none        &kp C_BRI_DN  &kp C_PP    &kp C_BRI_UP  &none       &bootloader
-                &sys_reset  &rgb_ug RGB_SPD  &rgb_ug RGB_HUD &rgb_ug RGB_SAD &rgb_ug RGB_BRD &rgb_ug RGB_EFF                                                          &kp C_PREV   &kp C_VOL_DN  &kp C_MUTE  &kp C_VOL_UP  &kp C_NEXT  &sys_reset
-                &none       &bt_0            &bt_1           &bt_2           &bt_3           &none            &trans  &trans  &trans        &none       &none  &none  &to COLEMAK  &to QWERTY    &to LOWER   &to UPPER     &none       &none
-                &trans      &none            &none           &none           &none                            &trans  &trans  &out OUT_USB  &bt BT_CLR  &none  &none               &none         &none       &none         &none       &trans
+                &none            &none            &none           &none           &none                                                                                               &none       &none         &none       &none  &none
+                &none            &none            &none           &none           &none           &none                                                                  &none        &none       &none         &none       &none  &none
+                &rgb_ug RGB_TOG  &rgb_ug RGB_SPI  &rgb_ug RGB_HUI &rgb_ug RGB_SAI &rgb_ug RGB_BRI &bootloader                                                            &bootloader  &kp C_PP    &kp C_VOL_UP  &kp C_MUTE  &none  &trans
+                &rgb_ug RGB_EFF  &rgb_ug RGB_SPD  &rgb_ug RGB_HUD &rgb_ug RGB_SAD &rgb_ug RGB_BRD &sys_reset                                                             &sys_reset   &kp C_PREV  &kp C_VOL_DN  &kp C_NEXT  &none  &trans
+                &trans           &none            &bt_0           &bt_1           &bt_2           &bt_3        &none   &none   &none         &none       &none   &none   &to COLEMAK  &to QWERTY  &to LOWER     &to UPPER   &none  &trans
+                &trans           &none            &none           &none           &none                        &trans  &trans  &out OUT_USB  &bt BT_CLR  &trans  &trans               &none       &none         &none       &none  &trans
             >;
         };
     };
